@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Rock Paper Scissors</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <div id="top-bar">
+            <h1 id="main-title">Rock Paper Scissors</h1><br>
+            <h2 id="sub-title">First to five points wins.</h2>
+        </div>
+        <div id="scoreBoard" class="scoreText roundResultText">
+        <h2>Human Wins! Final Score Is 5 to 2</h2><h3>You chose ROCK. Computer chose SCISSORS. You win this round!</h3></div>
+        <div id="controls">
+            <button id="rock" disabled="" class="rockDisabled">Rock</button>
+            <button id="paper" disabled="" class="paperDisabled">Paper</button>
+            <button id="scissors" disabled="" class="scissorsDisabled">Scissors</button>
+            <button id="reset" style="box-shadow: lightblue 0px 0px 20px 20px;">New Game</button>
+        </div>
+        <script>
+            initiatePresets();
+            let humanScore = 0;
+            let computerScore = 0;
+            //sets scoreboard on page load
+            const scoreArea = document.querySelector('#scoreBoard');
+            const scoreText = document.createElement('h2');
+            const roundResultText = document.createElement('h3');
+            scoreBoard.classList.add('scoreText');
+            scoreBoard.classList.add('roundResultText');
+            scoreText.textContent = "Player Score:" + " " + humanScore + " " + "Computer Score:" + " " + computerScore;
+            scoreBoard.appendChild(scoreText);
+            scoreBoard.appendChild(roundResultText);
+            //function that updates the scoreboard each round
+            function scoreboardUpdate() {
+                scoreText.textContent = "Player Score:" + " " + humanScore + " " + "Computer Score:" + " " + computerScore;
+            }
+            //function that selects the computer's move
+            function setComputerMove() {
+                let computerOptions = ['Rock', 'Paper', 'Scissors'];
+                let x = computerOptions[Math.floor(Math.random() * computerOptions.length)].toUpperCase();
+                return x;
+            }
+            function scoreReset() {
+                humanScore = 0;
+                computerScore = 0;
+                scoreText.textContent = "Player Score:" + " " + humanScore + " " + "Computer Score:" + " " + computerScore;
+                roundResultText.textContent = " ";
+                enableButtons();
+            }
+            function enableButtons() {
+                document.getElementById('rock').disabled = false;
+                document.getElementById('rock').removeAttribute('class', 'rockDisabled');
+                document.getElementById('paper').disabled = false;
+                document.getElementById('paper').removeAttribute('class', 'paperDisabled');
+                document.getElementById('scissors').disabled = false;
+                document.getElementById('scissors').removeAttribute('class', 'scissorsDisabled');
+                document.getElementById('reset').style.boxShadow = "";
+            }
+            function initiatePresets() {
+                let rockButton = document.querySelector('#rock');
+                let paperButton = document.querySelector('#paper');
+                let scissorsButton = document.querySelector('#scissors');
+                let resetButton = document.querySelector('#reset');
+                resetButton.addEventListener('click', function() {
+                    scoreReset();
+                });
+                rockButton.addEventListener('click', function() {
+                    playRound(setComputerMove(), 'ROCK');
+                });
+                paperButton.addEventListener('click', function() {
+                    playRound(setComputerMove(), 'PAPER');
+                });
+                scissorsButton.addEventListener('click', function() {
+                    playRound(setComputerMove(), 'SCISSORS');
+                });
+            }
+            function disableButtons() {
+                document.getElementById('rock').disabled = true;
+                document.getElementById('rock').setAttribute('class', 'rockDisabled');
+                document.getElementById('paper').disabled = true;
+                document.getElementById('paper').setAttribute('class', 'paperDisabled');
+                document.getElementById('scissors').disabled = true;
+                document.getElementById('scissors').setAttribute('class', 'scissorsDisabled');
+                document.getElementById('reset').style.boxShadow = "0px 0px 20px 20px lightblue";
+            }
+            function playRound(computerMove, humanMove) {
+                if (computerMove === humanMove) {
+                    roundResultText.textContent = 'Tie!';
+                } else if (computerMove === 'ROCK' && humanMove === 'PAPER') {
+                    roundResultText.textContent = 'You chose ROCK. Computer chose PAPER. You win this round!';
+                    humanScore++;
+                } else if (computerMove === 'PAPER' && humanMove === 'ROCK') {
+                    roundResultText.textContent = 'You chose PAPER. Computer chose ROCK. You lose this round!';
+                    computerScore++;
+                } else if (computerMove === 'ROCK' && humanMove === 'SCISSORS') {
+                    roundResultText.textContent = 'You chose SCISSORS. Computer chose ROCK. You lose this round!';
+                    computerScore++;
+                } else if (computerMove === 'SCISSORS' && humanMove === 'ROCK') {
+                    roundResultText.textContent = 'You chose ROCK. Computer chose SCISSORS. You win this round!';
+                    humanScore++;
+                } else if (computerMove === 'PAPER' && humanMove === 'SCISSORS') {
+                    roundResultText.textContent = 'You chose SCISSORS. Computer chose ROCK. You lose this round!';
+                    humanScore++;
+                } else if (computerMove === 'SCISSORS' && humanMove === 'PAPER') {
+                    roundResultText.textContent = 'You chose PAPER. Computer chose SCISSORS. You lose this round!';
+                    computerScore++;
+                }
+                //checks to see if a winner has been declared yet
+                if (computerScore == 5 || humanScore == 5) {
+                    if (computerScore > humanScore) {
+                        scoreText.textContent = 'Computer Wins! Final Score Is ' + computerScore + ' to ' + humanScore;
+                        disableButtons();
+                    } else if (humanScore > computerScore) {
+                        scoreText.textContent = 'Human Wins! Final Score Is ' + humanScore + ' to ' + computerScore;
+                        disableButtons();
+                    } 
+                } else {
+                        scoreboardUpdate();
+                    }
+            }
+        </script>
+    
+</body></html>
